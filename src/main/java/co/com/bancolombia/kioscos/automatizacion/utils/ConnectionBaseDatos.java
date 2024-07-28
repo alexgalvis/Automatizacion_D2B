@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionBaseDatos {
-    private static final String url = "jdbc:mysql://localhost:3306/data_prueba?serverTimezone=America/Bogota";
+    private static final String url = "jdbc:mysql://localhost:3306/autokioscos?serverTimezone=America/Bogota";
     private static final String username = "root";
     private static final String password = "Santafe11";
     private static Connection connection;
