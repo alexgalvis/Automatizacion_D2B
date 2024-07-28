@@ -47,4 +47,13 @@ public class PantallaTextKio {
     public void setId_flujo(int id_flujo) {
         this.id_flujo = id_flujo;
     }
+
+    @Override
+    public String toString() {
+        return "----------------------------------------------------------------------------\n" +
+                "\t\tText\t\t\t\t\tID\t\tTol\t\tIdFlujo\n"+
+                "---------------------------------------------------------------------------"+
+                "\t\t" + text + "\t\t\t\t\t\t\t" + id + "\t\t" + tolerancia + "\t\t" + id_flujo + "\n"+
+                "---------------------------------------------------------------------------";
+    }
 }

@@ -13,16 +13,19 @@ import net.sourceforge.tess4j.Tesseract;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
-public class LoadScreens {
-    private Map<Long,String> textScreen;
+public class ScreenMyBD {
+
+    private ArrayList<PantallaTextKio> screens;
     private final String tessdata = System.getProperty("user.dir") + "\\src\\resurces\\tessdata";
+
+    public ScreenMyBD() {
+        this.screens = new ArrayList<>();
+    }
 
     @Step("proceso de cargar imagenes")
     public void load(String ruta,int idFlujo){
-        this.textScreen = new HashMap<>();
         int ban = 1;
         while (true){
             BufferedImage imagen = loadImage(ruta,ban);
@@ -73,10 +76,19 @@ public class LoadScreens {
         Repositorio<PantallaTextKio> rep = new PantallasImpl();
         PantallaTextKio pantallaTextKio = new PantallaTextKio(text,0.9,idFlujo);
         Long id = rep.insert(pantallaTextKio);
-        textScreen.put(id,text);
+        pantallaTextKio.setId(id);
+        screens.add(pantallaTextKio);
+    }
+    @Step("consultar pantallas")
+    public void checkScreen(Long idFlujo){
+        Repositorio<PantallaTextKio> rep = new PantallasImpl();
+        this.screens = rep.listarPorCategoria(idFlujo);
+    }
+    @Step("imprimir pantallas")
+    public void printScreen(){
+        for (PantallaTextKio pan:screens) {
+            System.out.println(pan.toString());
+        }
     }
 
-    public Map<Long, String> getTextScreen() {
-        return textScreen;
-    }
 }

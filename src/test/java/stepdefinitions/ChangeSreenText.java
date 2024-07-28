@@ -2,26 +2,31 @@ package stepdefinitions;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import step.tasks.LoadScreens;
+import step.tasks.ScreenMyBD;
 
 import java.util.Map;
 
 public class ChangeSreenText {
-    private Map<Long, String> screens;
+
+    private ScreenMyBD scre;
     @When("^se cargan pantallas de la ruta \"([^\"]*)\" y flujo \"([^\"]*)\"$")
     public void loadScreen(String ruta, int idFlujo) {
-        LoadScreens loadScreens = new LoadScreens();
+        ScreenMyBD loadScreens = new ScreenMyBD();
         loadScreens.load(ruta,idFlujo);
-        this.screens = loadScreens.getTextScreen();
+        this.scre = loadScreens;
     }
 
     @Then("se listan pantallas guardadas")
     public void printScreen() {
-        for (Map.Entry<Long, String> entry : screens.entrySet()) {
-            Long key = entry.getKey();
-            String value = entry.getValue();
-            System.out.println("----------------" + key + "-----------------------------");
-            System.out.println(value + "\n");
-        }
+        scre.printScreen();
+    }
+
+    @When("^se listan las pantallas del flujo \"([^\"]*)\"$")
+    public void seListanLasPantallasDelFlujo(Long idFlujo) {
+        ScreenMyBD screenMyBD = new ScreenMyBD();
+        screenMyBD.checkScreen(idFlujo);
+        screenMyBD.printScreen();
+
+
     }
 }
