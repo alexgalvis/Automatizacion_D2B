@@ -50,6 +50,20 @@ public class PantallasImpl implements Repositorio<PantallaTextKio> {
     }
 
     @Override
+    public void Update(PantallaTextKio pantallaTextKio) {
+        try(PreparedStatement stmt = getConnection().
+                prepareStatement("UPDATE PANTALLAS SET TEXT = ?, TOLERANCIA = ?, ID_FLUJO = ? WHERE ID_PANTALLA = ?")){
+            stmt.setString(1,pantallaTextKio.getText());
+            stmt.setDouble(2,pantallaTextKio.getTolerancia());
+            stmt.setLong(3,pantallaTextKio.getId_flujo());
+            stmt.setLong(4,pantallaTextKio.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Long insert(PantallaTextKio pantallaTextKio) {
         Long id = null;
         try (PreparedStatement stmtUpdate = getConnection().
@@ -67,6 +81,18 @@ public class PantallasImpl implements Repositorio<PantallaTextKio> {
             e.printStackTrace();
         }
         return id;
+    }
+
+    @Override
+    public void eliminar(Long id) {
+        try(Connection conn = getConnection();PreparedStatement stmt = conn.
+                prepareStatement("DELETE FROM PANTALLAS WHERE ID_PANTALLA = ?")) {
+            stmt.setLong(1,id);
+            int registros = stmt.executeUpdate();
+            System.out.println("\nPantallas eliminadas: " + registros);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static PantallaTextKio getPantallaTextKio(ResultSet rs) throws SQLException {

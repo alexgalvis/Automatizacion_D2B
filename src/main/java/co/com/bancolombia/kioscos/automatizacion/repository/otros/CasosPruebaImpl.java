@@ -24,7 +24,17 @@ public class CasosPruebaImpl implements Repositorio<CasoPruebaKio>{
     }
 
     @Override
+    public void Update(CasoPruebaKio casoPruebaKio) {
+
+    }
+
+    @Override
     public Long insert(CasoPruebaKio casoPruebaKio) {
         return null;
+    }
+
+    @Override
+    public void eliminar(Long id) {
+
     }
 }

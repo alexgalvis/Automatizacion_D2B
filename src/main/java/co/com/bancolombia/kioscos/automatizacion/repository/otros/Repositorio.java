@@ -5,9 +5,10 @@ import java.util.ArrayList;
 public interface Repositorio<T>{
     ArrayList<T> listarPorCategoria(Long idFlujo);
     T porId(Long id);
+    void Update(T t);
     //void guardar(T t);
     Long insert(T t);
 
-    //void eliminar(Long id);
+    void eliminar(Long id);
     //T porNumProducto(String numProd);
 }

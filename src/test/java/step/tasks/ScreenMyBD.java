@@ -33,11 +33,11 @@ public class ScreenMyBD {
                 System.out.println("termino cargue de imagen....");break;}
             String text = ocr(imagen);
             text = filtrar(text.split("\n"));
-            guardarMyBD(text,idFlujo);
+            guardarMyBD(new PantallaTextKio(text,0.9,idFlujo));
             ban++;
         }
     }
-    @Step("cargar imagen")
+    @Step("cargar imagen en ruta")
     public BufferedImage loadImage(String ruta,int id){
         BufferedImage image = null;
         try {
@@ -72,9 +72,8 @@ public class ScreenMyBD {
         return textFilter.toString();
     }
     @Step("guardar imagen en BD")
-    public void guardarMyBD(String text,int idFlujo){
+    public void guardarMyBD(PantallaTextKio pantallaTextKio){
         Repositorio<PantallaTextKio> rep = new PantallasImpl();
-        PantallaTextKio pantallaTextKio = new PantallaTextKio(text,0.9,idFlujo);
         Long id = rep.insert(pantallaTextKio);
         pantallaTextKio.setId(id);
         screens.add(pantallaTextKio);
@@ -89,6 +88,16 @@ public class ScreenMyBD {
         for (PantallaTextKio pan:screens) {
             System.out.println(pan.toString());
         }
+    }
+    @Step("modificar pantalla")
+    public void updateScreen(PantallaTextKio pantallaTextKio){
+        Repositorio<PantallaTextKio> rep = new PantallasImpl();
+        rep.Update(pantallaTextKio);
+    }
+    @Step("eliminar pantalla por id")
+    public void deleteScreen(Long id){
+        Repositorio<PantallaTextKio> rep = new PantallasImpl();
+        rep.eliminar(id);
     }
 
 }
