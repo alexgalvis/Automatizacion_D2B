@@ -5,13 +5,13 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import step.tasks.ScreenMyBD;
 
-import java.util.Map;
+import java.io.IOException;
 
 public class ChangeSreenText {
 
     private ScreenMyBD scre;
     @When("^se cargan pantallas de la ruta \"([^\"]*)\" y flujo \"([^\"]*)\"$")
-    public void loadScreen(String ruta, int idFlujo) {
+    public void loadScreen(String ruta, int idFlujo) throws IOException {
         ScreenMyBD loadScreens = new ScreenMyBD();
         loadScreens.load(ruta,idFlujo);
         this.scre = loadScreens;
@@ -39,6 +39,7 @@ public class ChangeSreenText {
         PantallaTextKio pantallaTextKio = new PantallaTextKio(text,tol,idFlujo);
         pantallaTextKio.setId(id);
         screenMyBD.updateScreen(pantallaTextKio);
+        screenMyBD.printScreen();
     }
 
     @When("^se crea nueva pantalla con Tolerancia \"([^\"]*)\", idFlujo \"([^\"]*)\" y \"([^\"]*)\"$")

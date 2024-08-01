@@ -25,7 +25,7 @@ public class ScreenMyBD {
     }
 
     @Step("proceso de cargar imagenes")
-    public void load(String ruta,int idFlujo){
+    public void load(String ruta,int idFlujo) throws IOException {
         int ban = 1;
         while (true){
             BufferedImage imagen = loadImage(ruta,ban);
@@ -33,19 +33,27 @@ public class ScreenMyBD {
                 System.out.println("termino cargue de imagen....");break;}
             String text = ocr(imagen);
             text = filtrar(text.split("\n"));
-            guardarMyBD(new PantallaTextKio(text,0.9,idFlujo));
+            Long newId = guardarMyBD(new PantallaTextKio(text,0.9,idFlujo));
+            renameImage(ruta,ban,newId,idFlujo);
             ban++;
         }
     }
     @Step("cargar imagen en ruta")
     public BufferedImage loadImage(String ruta,int id){
-        BufferedImage image = null;
         try {
-            image = ImageIO.read(new File(ruta + id + ".png"));
+            return ImageIO.read(new File(ruta + id + ".png"));
         } catch (IOException e) {
             return null;
         }
-        return image;
+    }
+    @Step("renombrar imagen guardada en MyBD")
+    public void renameImage(String ruta,int id, Long newId,int idFlujo) throws IOException{
+        File oldFile = new File(ruta + id + ".png");
+        File newFile = new File(ruta + newId + "_" + "flujo_" + idFlujo + ".png");
+        boolean success = oldFile.renameTo(newFile);
+        if (!success){
+            throw new IOException("No se pudo renombrar imagen en local...");
+        }
     }
     @Step("aplicar OCR")
     public String ocr(BufferedImage image){
@@ -72,11 +80,12 @@ public class ScreenMyBD {
         return textFilter.toString();
     }
     @Step("guardar imagen en BD")
-    public void guardarMyBD(PantallaTextKio pantallaTextKio){
+    public Long guardarMyBD(PantallaTextKio pantallaTextKio){
         Repositorio<PantallaTextKio> rep = new PantallasImpl();
         Long id = rep.insert(pantallaTextKio);
         pantallaTextKio.setId(id);
         screens.add(pantallaTextKio);
+        return id;
     }
     @Step("consultar pantallas")
     public void checkScreen(Long idFlujo){
@@ -93,6 +102,7 @@ public class ScreenMyBD {
     public void updateScreen(PantallaTextKio pantallaTextKio){
         Repositorio<PantallaTextKio> rep = new PantallasImpl();
         rep.Update(pantallaTextKio);
+        screens.add(pantallaTextKio);
     }
     @Step("eliminar pantalla por id")
     public void deleteScreen(Long id){
